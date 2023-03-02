@@ -18,7 +18,15 @@ export default function Body() {
 
     const [book, setBook] = useState("");  
     const [result, setResult] = useState([]);  
-    const [apiKey, setApiKey] = useState("AIzaSyCfIY1dDo_UFl9RCSIERSJQqnqo7yxeBYQ")  
+    const [apiKey, setApiKey] = useState("AIzaSyCfIY1dDo_UFl9RCSIERSJQqnqo7yxeBYQ");
+    const limitString = (str = '', num = 1) => {
+        const { length: len } = str;
+        if(num < len){
+           return str.slice(0, num) + '...';
+        }else{
+           return str;
+        };
+     };
 
     function handleChange(event) {  
         const book = event.target.value;  
@@ -49,13 +57,12 @@ export default function Body() {
                 {result.map(book => (  
                     <div className="col-sm-2">
                         
-                        <Card style={{ 'marginTop': '10px' }}>  
-                            <Card.Img variant="top" src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title} />  
+                        <Card border="secondary" style={{ 'marginTop': '10px' }}>  
+                            <Card.Img variant="top" src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.volumeInfo.title} />  
                             
                             <Card.Body>  
-
-                            /* Book Info Here */
-
+                            {/* Book Info Here */}
+                            { book.volumeInfo.description?limitString(book.volumeInfo.description, 250):'Summary Unavailable' }
                             </Card.Body>  
                         </Card>  
                     </div>  
