@@ -1,45 +1,37 @@
 import axios from "axios";
-import {useState} from "react";
+import { useState } from "react";
 import { Card } from 'react-bootstrap'; 
 
 export default function Body() {
-    /**
-     * 
-     * npm install axios
-     * npm install react-bootstrap
-     * 
-     * Google Search Body Part
-     * Google API Key is linked to my Chrome Account. If the key doesn's work you can try adding your own google developer api key and it might work.
-     * I was following along a video on how to implement this and they recommended this Axios to get the HTTP Request for the API
-     * I used bootstrap to make the results into the card style.
-     * There is a console log that logs all the search results into an array and it has all the varaibles for the book tiltes, book desc, etc.
-     * If you have any questions about the code feel free to reach out.
-     */
 
     const [book, setBook] = useState("");  
     const [result, setResult] = useState([]);  
     const [apiKey, setApiKey] = useState("AIzaSyCfIY1dDo_UFl9RCSIERSJQqnqo7yxeBYQ");
+
     const limitString = (str = '', num = 1) => {
         const { length: len } = str;
-        if(num < len){
+        if (num < len){
            return str.slice(0, num) + '...';
-        }else{
+        } else {
            return str;
         };
-     };
+    };
 
     function handleChange(event) {  
         const book = event.target.value;  
         setBook(book);  
     }  
+
     function handleSubmit(event) {  
         event.preventDefault();  
         axios.get("https://www.googleapis.com/books/v1/volumes?q=" + book + "&key=" + apiKey + "&maxResults=40")  
             .then(data => {  
                 console.log(data.data.items);  
                 setResult(data.data.items);  
-            })
-        }
+            }
+        )
+    }
+        
     return (
         <form onSubmit={handleSubmit}>  
         <div className="card-header main-search">  
@@ -62,7 +54,7 @@ export default function Body() {
                             
                             <Card.Body>  
                             {/* Book Info Here */}
-                            { book.volumeInfo.description?limitString(book.volumeInfo.description, 250):'Summary Unavailable' }
+                            { book.volumeInfo.description?limitString(book.volumeInfo.description, 250):'Description Unavailable' }
                             </Card.Body>  
                         </Card>  
                     </div>  
