@@ -54,7 +54,19 @@ export default function Body() {
                             
                             <Card.Body>  
                             {/* Book Info Here */}
-                            { book.volumeInfo.description?limitString(book.volumeInfo.description, 250):'Description Unavailable' }
+
+                            <div className="bookcard-page">
+                            Number of Pages: {book.volumeInfo.pageCount}
+                            </div>
+
+                            <div className="bookcard-published">
+                            Published: {book.volumeInfo.publishedDate}
+                            </div>
+
+                            <div className="bookcard-description">
+                            { book.volumeInfo.description?limitString(book.volumeInfo.description, 150):'Description Unavailable' }
+                            </div>
+                            
                             </Card.Body>  
                         </Card>  
                     </div>  
