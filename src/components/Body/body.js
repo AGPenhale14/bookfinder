@@ -1,37 +1,37 @@
 import axios from "axios";
-import {useState} from "react";
+import { useState } from "react";
 import { Card } from 'react-bootstrap'; 
 
 export default function Body() {
-    /**
-     * 
-     * npm install axios
-     * npm install react-bootstrap
-     * 
-     * Google Search Body Part
-     * Google API Key is linked to my Chrome Account. If the key doesn's work you can try adding your own google developer api key and it might work.
-     * I was following along a video on how to implement this and they recommended this Axios to get the HTTP Request for the API
-     * I used bootstrap to make the results into the card style.
-     * There is a console log that logs all the search results into an array and it has all the varaibles for the book tiltes, book desc, etc.
-     * If you have any questions about the code feel free to reach out.
-     */
 
     const [book, setBook] = useState("");  
     const [result, setResult] = useState([]);  
-    const [apiKey, setApiKey] = useState("AIzaSyCfIY1dDo_UFl9RCSIERSJQqnqo7yxeBYQ")  
+    const [apiKey, setApiKey] = useState("AIzaSyCfIY1dDo_UFl9RCSIERSJQqnqo7yxeBYQ");
+
+    const limitString = (str = '', num = 1) => {
+        const { length: len } = str;
+        if (num < len){
+           return str.slice(0, num) + '...';
+        } else {
+           return str;
+        };
+    };
 
     function handleChange(event) {  
         const book = event.target.value;  
         setBook(book);  
     }  
+
     function handleSubmit(event) {  
         event.preventDefault();  
         axios.get("https://www.googleapis.com/books/v1/volumes?q=" + book + "&key=" + apiKey + "&maxResults=40")  
             .then(data => {  
                 console.log(data.data.items);  
                 setResult(data.data.items);  
-            })
-        }
+            }
+        )
+    }
+        
     return (
         <form onSubmit={handleSubmit}>  
         <div className="card-header main-search">  
@@ -49,13 +49,24 @@ export default function Body() {
                 {result.map(book => (  
                     <div className="col-sm-2">
                         
-                        <Card style={{ 'marginTop': '10px' }}>  
-                            <Card.Img variant="top" src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title} />  
+                        <Card border="secondary" style={{ 'marginTop': '10px' }}>  
+                            <Card.Img variant="top" src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.volumeInfo.title} />  
                             
                             <Card.Body>  
+                            {/* Book Info Here */}
 
-                            /* Book Info Here */
+                            <div className="bookcard-page">
+                            Number of Pages: {book.volumeInfo.pageCount}
+                            </div>
 
+                            <div className="bookcard-published">
+                            Published: {book.volumeInfo.publishedDate}
+                            </div>
+
+                            <div className="bookcard-description">
+                            { book.volumeInfo.description?limitString(book.volumeInfo.description, 150):'Description Unavailable' }
+                            </div>
+                            
                             </Card.Body>  
                         </Card>  
                     </div>  
