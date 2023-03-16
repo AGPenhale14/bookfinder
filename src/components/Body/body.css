@@ -1,0 +1,24 @@
+.card {
+    flex-direction: row;
+}
+
+.bookOutput {
+    justify-content: center;
+    text-align: left;
+    margin: 0px 3px 0px 3px;
+}
+
+.topInfo {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    justify-content: space-evenly;
+}
+
+.leftInfo {
+    margin: 0px 4px 0px 0px;
+}
+
+.rightInfo {
+    margin: 0px 0px 0px 4px;
+}

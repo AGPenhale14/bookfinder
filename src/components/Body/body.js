@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { Card } from 'react-bootstrap'; 
+import './body.css';
 
 export default function Body() {
 
@@ -44,27 +45,49 @@ export default function Body() {
                 </div>  
             </div>  
         </div>  
-        <div className="container">  
-            <div className="row"> 
+        <div className="container-fluid">  
+            <div className="row bookOutput"> 
                 {result.map(book => (  
-                    <div className="col-sm-2">
+                    <div className="col-sm-2" style={{ 'width': '550px'}}>
                         
-                        <Card border="secondary" style={{ 'marginTop': '10px' }}>  
+                        <Card border="secondary" style={{ 'marginTop': '10px', 'marginBottom': '10px'}}>  
                             <Card.Img variant="top" src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.volumeInfo.title} />  
                             
                             <Card.Body>  
                             {/* Book Info Here */}
 
-                            <div className="bookcard-page">
-                            Number of Pages: {book.volumeInfo.pageCount}
+                        <div className="topInfo">
+                            <div className="leftInfo">
+                                <div className="bookcard-page">
+                                Number of Pages: {book.volumeInfo.pageCount}
+                                </div>
+
+                                <div className="bookcard-published">
+                                Published: {book.volumeInfo.publishedDate}
+                                </div>
+
+                                <div className="bookcard-avarage-rating">
+                                Avarage Rating: {book.volumeInfo.averageRating?book.volumeInfo.averageRating:'None'}
+                                </div>
                             </div>
 
-                            <div className="bookcard-published">
-                            Published: {book.volumeInfo.publishedDate}
+                            <div className="rightInfo">
+                                <div className="bookcard-total-rating">
+                                Total Reviews: {book.volumeInfo.ratingsCount?book.volumeInfo.ratingsCount: '0'}
+                                </div>
+
+                                <div className="bookcard-price">
+                                Price: {book.saleInfo.saleability === 'FOR_SALE'? '$'+book.saleInfo.listPrice.amount: 'Not Listed'}
+                                </div>
+
+                                <div className="bookcard-link">
+                                <a href={book.volumeInfo.infoLink}>Link to Book</a>
+                                </div>
                             </div>
+                        </div>
 
                             <div className="bookcard-description">
-                            { book.volumeInfo.description?limitString(book.volumeInfo.description, 150):'Description Unavailable' }
+                            { book.volumeInfo.description?limitString(book.volumeInfo.description, 200):'Description Unavailable' }
                             </div>
                             
                             </Card.Body>  
