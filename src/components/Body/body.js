@@ -19,7 +19,8 @@ export default function Body() {
     };
 
     function handleChange(event) {  
-        const book = event.target.value;  
+        var inputField = document.getElementById("inputValue");
+        const book = inputField.value;  
         var dropdown = document.getElementById("slectedType");
         var value = dropdown.value;
 
@@ -60,7 +61,7 @@ export default function Body() {
         <div className="card-header main-search">  
             <div className="row">  
                 <div className="col-12 col-md-3 col-xl-3">  
-                    <input onChange={handleChange} className="AutoFocus form-control" placeholder="Type Here For Results!" type="text" />  
+                    <input onChange={handleChange} id="inputValue" className="AutoFocus form-control" placeholder="Type Here For Results!" type="text" />  
                 </div>    
                 <div className="col-12 col-md-3 col-xl-3">  
                     <select onChange={handleChange} id="slectedType">
