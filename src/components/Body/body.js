@@ -20,7 +20,29 @@ export default function Body() {
 
     function handleChange(event) {  
         const book = event.target.value;  
-        setBook(book);  
+        var dropdown = document.getElementById("slectedType");
+        var value = dropdown.value;
+
+        if (value === "keyword") {
+            setBook(book);
+        }
+
+        if (value === "subject") {
+            setBook("subject:" + book);
+        }
+
+        if (value === "title") {
+            setBook("intitle:" + book);
+        }
+
+        if (value === "author") {
+            setBook("inauthor:" + book);
+        }
+
+        if (value === "isbn") {
+            setBook("isbn:" + book);
+        }
+
     }  
 
     function handleSubmit(event) {  
@@ -39,7 +61,16 @@ export default function Body() {
             <div className="row">  
                 <div className="col-12 col-md-3 col-xl-3">  
                     <input onChange={handleChange} className="AutoFocus form-control" placeholder="Type Here For Results!" type="text" />  
-                </div>  
+                </div>    
+                <div className="col-12 col-md-3 col-xl-3">  
+                    <select onChange={handleChange} id="slectedType">
+                        <option value="keyword">Keyword</option>
+                        <option value="subject">Subject</option>
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                        <option value="isbn">ISBN Number</option>
+                    </select>
+                </div> 
                 <div className="ml-auto">  
                     <input type="submit" value="Search" className="btn btn-primary search-btn" />
                 </div>  
@@ -47,7 +78,7 @@ export default function Body() {
         </div>  
         <div className="container-fluid">  
             <div className="row bookOutput"> 
-                {result.map(book => (  
+                {result ? result.map(book => (  
                     <div className="col-sm-2" style={{ 'width': '550px'}}>
                         
                         <Card border="secondary" style={{ 'marginTop': '10px', 'marginBottom': '10px'}}>  
@@ -93,7 +124,7 @@ export default function Body() {
                             </Card.Body>  
                         </Card>  
                     </div>  
-                ))}  
+                )): <p>Unfortunately, no results were found with your search.  Change the search parameters & try again...</p> }
             </div>  
         </div>  
     </form>  
