@@ -6,6 +6,8 @@ import './body.css';
 export default function Body() {
 
     const [book, setBook] = useState("");  
+    const [printType, setPrintType] = useState(""); 
+    const [ordered, setOrdered] = useState("relevance");
     const [result, setResult] = useState([]);  
     const [apiKey, setApiKey] = useState("AIzaSyCfIY1dDo_UFl9RCSIERSJQqnqo7yxeBYQ");
 
@@ -23,6 +25,8 @@ export default function Body() {
         const book = inputField.value;  
         var dropdown = document.getElementById("slectedType");
         var value = dropdown.value;
+        var printDropdown = document.getElementById("slectedPrintType");
+        var printValue = printDropdown.value;
 
         if (value === "keyword") {
             setBook(book);
@@ -44,37 +48,93 @@ export default function Body() {
             setBook("isbn:" + book);
         }
 
-    }  
 
-    function handleSubmit(event) {  
-        event.preventDefault();  
-        axios.get("https://www.googleapis.com/books/v1/volumes?q=" + book + "&key=" + apiKey + "&maxResults=40")  
+        if (printValue === "all") {
+            setPrintType("all");
+        }
+
+        if (printValue === "books") {
+            setPrintType("books");
+        }
+
+        if (printValue === "magazines") {
+            setPrintType("magazines");
+        }
+
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        axios.get("https://www.googleapis.com/books/v1/volumes?q=" + book + "&printType=" + printType + "&orderBy=" + ordered + "&key=" + apiKey + "&maxResults=40")  
             .then(data => {  
-                console.log(data.data.items);  
-                setResult(data.data.items);  
+                console.log(data.data.items);
+                setResult(data.data.items);
             }
         )
+    }
+
+    function handleSort(event) {
+        event.preventDefault();
+        var sortDropdown = document.getElementById("slectedSortType");
+        var sortValue = sortDropdown.value;
+
+        if (sortValue === "totalreviews") {
+            let sortedByTotalReviews = result.sort((p1, p2) => (p2.volumeInfo.ratingsCount?p2.volumeInfo.ratingsCount: '0') - (p1.volumeInfo.ratingsCount?p1.volumeInfo.ratingsCount: '0'));
+            
+            setResult(sortedByTotalReviews);
+            setResult(prevResult => prevResult.filter(e => e !== result));
+        }
+        
+        if (sortValue === "relevance") {
+            setOrdered("relevance");
+
+            axios.get("https://www.googleapis.com/books/v1/volumes?q=" + book + "&printType=" + printType + "&orderBy=" + ordered + "&key=" + apiKey + "&maxResults=40")  
+                .then(data => {  
+                    console.log(data.data.items);
+                    setResult(data.data.items);
+                }
+            )
+        }
     }
         
     return (
         <form onSubmit={handleSubmit}>  
         <div className="card-header main-search">  
             <div className="row">  
-                <div className="col-12 col-md-3 col-xl-3">  
+                <div className="topRow">  
                     <input onChange={handleChange} id="inputValue" className="AutoFocus form-control" placeholder="Type Here For Results!" type="text" />  
-                </div>    
-                <div className="col-12 col-md-3 col-xl-3">  
-                    <select onChange={handleChange} id="slectedType">
-                        <option value="keyword">Keyword</option>
-                        <option value="subject">Subject</option>
-                        <option value="title">Title</option>
-                        <option value="author">Author</option>
-                        <option value="isbn">ISBN Number</option>
-                    </select>
-                </div> 
-                <div className="ml-auto">  
-                    <input type="submit" value="Search" className="btn btn-primary search-btn" />
-                </div>  
+                </div>
+                <div className="bottomRow">  
+                    <div >  
+                        <select onChange={handleChange} id="slectedType">
+                            <option value="keyword">Keyword</option>
+                            <option value="subject">Subject</option>
+                            <option value="title">Title</option>
+                            <option value="author">Author</option>
+                            <option value="isbn">ISBN Number</option>
+                        </select>
+                    </div>     
+                    <div >  
+                        <select onChange={handleChange} id="slectedPrintType">
+                            <option value="all">All Print Types</option>
+                            <option value="books">Books</option>
+                            <option value="magazines">Magazines</option>
+                        </select>
+                    </div>
+                    <div>  
+                        <input type="submit" value="Search" className="btn btn-primary search-btn" />
+                    </div>
+                </div>
+                <div>
+                    <h5> Returned {result.length} out of 40 max results</h5>
+                    {result.length > 0 ? <div className="hiddenRow">
+                    <h5> Sort by:</h5>
+                        <select onChange={handleSort} id="slectedSortType">
+                            <option value="relevance">Relevance</option>
+                            <option value="totalreviews">Total Reviews</option>
+                        </select>
+                    </div> : null}
+                </div>
             </div>  
         </div>  
         <div className="container-fluid">  
@@ -88,35 +148,47 @@ export default function Body() {
                             <Card.Body>  
                             {/* Book Info Here */}
 
-                        <div className="topInfo">
-                            <div className="leftInfo">
-                                <div className="bookcard-page">
-                                Number of Pages: {book.volumeInfo.pageCount}
+                            <div className="topInfo">
+
+                                <div className="bookcard-title">
+                                    Title: {book.volumeInfo.title}
                                 </div>
 
-                                <div className="bookcard-published">
-                                Published: {book.volumeInfo.publishedDate}
-                                </div>
-
-                                <div className="bookcard-avarage-rating">
-                                Avarage Rating: {book.volumeInfo.averageRating?book.volumeInfo.averageRating:'None'}
+                                <div className="bookcard-authors">
+                                    Authors: {book.volumeInfo.authors}
                                 </div>
                             </div>
 
-                            <div className="rightInfo">
-                                <div className="bookcard-total-rating">
-                                Total Reviews: {book.volumeInfo.ratingsCount?book.volumeInfo.ratingsCount: '0'}
+                            <div className="midInfo">
+                                
+                                <div className="leftInfo">
+                                    <div className="bookcard-page">
+                                    Number of Pages: {book.volumeInfo.pageCount !== undefined && book.volumeInfo.pageCount !== 0 ? book.volumeInfo.pageCount: 'N/A'}
+                                    </div>
+
+                                    <div className="bookcard-published">
+                                    Published: {book.volumeInfo.publishedDate}
+                                    </div>
+
+                                    <div className="bookcard-avarage-rating">
+                                    Avarage Rating: {book.volumeInfo.averageRating?book.volumeInfo.averageRating:'None'}
+                                    </div>
                                 </div>
 
-                                <div className="bookcard-price">
-                                Price: {book.saleInfo.saleability === 'FOR_SALE'? '$'+book.saleInfo.listPrice.amount: 'Not Listed'}
-                                </div>
+                                <div className="rightInfo">
+                                    <div className="bookcard-total-rating">
+                                    Total Reviews: {book.volumeInfo.ratingsCount?book.volumeInfo.ratingsCount: '0'}
+                                    </div>
 
-                                <div className="bookcard-link">
-                                <a href={book.volumeInfo.infoLink}>Link to Book</a>
+                                    <div className="bookcard-price">
+                                    Price: {book.saleInfo.saleability === 'FOR_SALE'? '$'+book.saleInfo.listPrice.amount: 'Not Listed'}
+                                    </div>
+
+                                    <div className="bookcard-link">
+                                    <a href={book.volumeInfo.infoLink}>Link to Book</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
                             <div className="bookcard-description">
                             { book.volumeInfo.description?limitString(book.volumeInfo.description, 200):'Description Unavailable' }
