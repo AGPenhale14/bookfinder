@@ -50,22 +50,26 @@ export default function Body() {
 
 
         if (printValue === "all") {
-            setPrintType("all");
+            setPrintType("&printType=all");
         }
 
         if (printValue === "books") {
-            setPrintType("books");
+            setPrintType("&printType=books");
         }
 
         if (printValue === "magazines") {
-            setPrintType("magazines");
+            setPrintType("&printType=magazines");
+        }
+
+        if (printValue === "ebooks") {
+            setPrintType("&filter=ebooks");
         }
 
     }
 
     function handleSubmit(event) {
         event.preventDefault();
-        axios.get("https://www.googleapis.com/books/v1/volumes?q=" + book + "&printType=" + printType + "&orderBy=" + ordered + "&key=" + apiKey + "&maxResults=40")  
+        axios.get("https://www.googleapis.com/books/v1/volumes?q=" + book + printType + "&orderBy=" + ordered + "&key=" + apiKey + "&maxResults=40")  
             .then(data => {  
                 console.log(data.data.items);
                 setResult(data.data.items);
@@ -119,6 +123,7 @@ export default function Body() {
                             <option value="all">All Print Types</option>
                             <option value="books">Books</option>
                             <option value="magazines">Magazines</option>
+                            <option value="ebooks">EBooks</option>
                         </select>
                     </div>
                     <div>  
