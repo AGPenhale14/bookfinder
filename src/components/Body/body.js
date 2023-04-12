@@ -99,6 +99,42 @@ export default function Body() {
                 }
             )
         }
+
+        if (sortValue === "totalpages") {
+            let sortedByTotalPages = result.sort((p1, p2) => (p2.volumeInfo.pageCount?p2.volumeInfo.pageCount: '0') - (p1.volumeInfo.pageCount?p1.volumeInfo.pageCount: '0'));
+            
+            setResult(sortedByTotalPages);
+            setResult(prevResult => prevResult.filter(e => e !== result));
+        }
+
+        if (sortValue === "avgreviewshigh") {
+            let sortedByReview = result.sort((p1, p2) => (p2.volumeInfo.averageRating?p2.volumeInfo.averageRating: '0') - (p1.volumeInfo.averageRating?p1.volumeInfo.averageRating: '0'));
+            
+            setResult(sortedByReview);
+            setResult(prevResult => prevResult.filter(e => e !== result));
+        }
+
+        if (sortValue === "avgreviewslow") {
+            let sortedByReview = result.sort((p1, p2) => (p2.volumeInfo.averageRating?p2.volumeInfo.averageRating: '0') - (p1.volumeInfo.averageRating?p1.volumeInfo.averageRating: '0'));
+            
+            setResult(sortedByReview.reverse());
+            setResult(prevResult => prevResult.filter(e => e !== result));
+        }
+
+        if (sortValue === "publisheddateold") {
+
+            let sortedBooks = result.sort((a, b) => Date.parse(a.volumeInfo.publishedDate) - Date.parse(b.volumeInfo.publishedDate));
+            setResult(sortedBooks);
+            setResult(prevResult => prevResult.filter(e => e !== result));
+        }
+
+        if (sortValue === "publisheddatenew") {
+
+            let sortedBooks = result.sort((a, b) => Date.parse(a.volumeInfo.publishedDate) - Date.parse(b.volumeInfo.publishedDate));
+            setResult(sortedBooks.reverse());
+            setResult(prevResult => prevResult.filter(e => e !== result));
+        }
+        
     }
         
     return (
@@ -137,6 +173,11 @@ export default function Body() {
                         <select onChange={handleSort} id="slectedSortType">
                             <option value="relevance">Relevance</option>
                             <option value="totalreviews">Total Reviews</option>
+                            <option value="totalpages">Total Pages</option>
+                            <option value="avgreviewshigh">Avg. Rating -Highest-</option>
+                            <option value="avgreviewslow">Avg. Rating -Lowest-</option>
+                            <option value="publisheddatenew">Date Published -Newest-</option>
+                            <option value="publisheddateold">Date Published -Oldest-</option>
                         </select>
                     </div> : null}
                 </div>
