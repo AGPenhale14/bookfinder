@@ -31,7 +31,7 @@ cd bookfinder
 # 3. install the dependencies
 npm install
 
-# 3. Finally, start the server:
+# 3. Finally, start the server
 npm start
 ```
 You can then access the site at [http://localhost:3000](http://localhost:3000).
