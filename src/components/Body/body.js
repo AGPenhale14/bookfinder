@@ -216,8 +216,8 @@ export default function Body() {
                                     Published: {book.volumeInfo.publishedDate}
                                     </div>
 
-                                    <div className="bookcard-avarage-rating">
-                                    Avarage Rating: {book.volumeInfo.averageRating?book.volumeInfo.averageRating:'None'}
+                                    <div className="bookcard-average-rating">
+                                    Average Rating: {book.volumeInfo.averageRating?book.volumeInfo.averageRating:'None'}
                                     </div>
                                 </div>
 
