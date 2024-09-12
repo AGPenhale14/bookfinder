@@ -107,14 +107,14 @@ export default function Body() {
             setResult(prevResult => prevResult.filter(e => e !== result));
         }
 
-        if (sortValue === "avgreviews") {
+        if (sortValue === "avgreviewshigh") {
             let sortedByReview = result.sort((p1, p2) => (p2.volumeInfo.averageRating?p2.volumeInfo.averageRating: '0') - (p1.volumeInfo.averageRating?p1.volumeInfo.averageRating: '0'));
             
             setResult(sortedByReview);
             setResult(prevResult => prevResult.filter(e => e !== result));
         }
 
-        if (sortValue === "avgreviews") {
+        if (sortValue === "avgreviewslow") {
             let sortedByReview = result.sort((p1, p2) => (p2.volumeInfo.averageRating?p2.volumeInfo.averageRating: '0') - (p1.volumeInfo.averageRating?p1.volumeInfo.averageRating: '0'));
             
             setResult(sortedByReview.reverse());
@@ -174,8 +174,8 @@ export default function Body() {
                             <option value="relevance">Relevance</option>
                             <option value="totalreviews">Total Reviews</option>
                             <option value="totalpages">Total Pages</option>
-                            <option value="avgreviews">Avg. Rating -Highest-</option>
-                            <option value="avgreviews">Avg. Rating -Lowest-</option>
+                            <option value="avgreviewshigh">Avg. Rating -Highest-</option>
+                            <option value="avgreviewslow">Avg. Rating -Lowest-</option>
                             <option value="publisheddatenew">Date Published -Newest-</option>
                             <option value="publisheddateold">Date Published -Oldest-</option>
                         </select>
@@ -216,8 +216,8 @@ export default function Body() {
                                     Published: {book.volumeInfo.publishedDate}
                                     </div>
 
-                                    <div className="bookcard-avarage-rating">
-                                    Avarage Rating: {book.volumeInfo.averageRating?book.volumeInfo.averageRating:'None'}
+                                    <div className="bookcard-average-rating">
+                                    Average Rating: {book.volumeInfo.averageRating?book.volumeInfo.averageRating:'None'}
                                     </div>
                                 </div>
 
